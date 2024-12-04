@@ -1,0 +1,100 @@
+@use "./fonts" as *;
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply box-border font-montserrat font-normal leading-normal;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-white-medium;
+}
+
+h1,
+h2,
+h3 {
+  @apply text-40 font-bold xs:text-5xl gl:text-80;
+}
+
+h1,
+h2 {
+  @apply leading-normal;
+}
+
+h3 {
+  @apply font-medium uppercase leading-1.5;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+li {
+  @apply transition-all duration-150;
+}
+
+button,
+button span,
+img {
+  @apply transition-all duration-200;
+}
+
+input,
+button {
+  @apply outline-0;
+}
+
+.container {
+  @apply mx-auto box-border w-full min-w-80 max-w-360 px-5;
+}
+
+.orange-filter {
+  transition: filter 0.3s ease;
+
+  &:hover {
+    filter: brightness(0) saturate(100%) invert(65%) sepia(56%) saturate(6779%)
+      hue-rotate(13deg) brightness(101%) contrast(98%);
+  }
+}
+
+/* Загальний стиль для пагінації */
+.swiper-pagination {
+  position: static !important;
+  margin-top: 40px;
+}
+
+.swiper-pagination-bullet {
+  width: 18px !important;
+  height: 6px !important;
+  border-radius: 0 !important;
+  background: #b4b4b4 !important;
+  opacity: 1 !important;
+  transition:
+    width 0.2s ease,
+    background 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  width: 48px !important;
+  background: #030303 !important;
+}
+
+/* Стиль для пагінації типу "review" */
+.swiper-pagination-review .swiper-pagination-bullet-active,
+.swiper-pagination-service .swiper-pagination-bullet-active {
+  background: #030303 !important;
+}
+
+/* Стиль для пагінації типу "gallery" */
+.swiper-pagination-gallery .swiper-pagination-bullet-active {
+  background: #f8faff !important;
+}

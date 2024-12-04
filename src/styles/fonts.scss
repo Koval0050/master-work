@@ -1,0 +1,20 @@
+@mixin font-face($font-family, $file-name, $font-weight) {
+  @font-face {
+    font-family: $font-family;
+    src: url("/fonts/#{$font-family}/#{$file-name}");
+    font-style: normal;
+    font-weight: $font-weight;
+    font-display: swap;
+  }
+}
+
+// Montserrat font family
+@include font-face("Montserrat", "Montserrat-Black.ttf", 900);
+@include font-face("Montserrat", "Montserrat-ExtraBold.ttf", 800);
+@include font-face("Montserrat", "Montserrat-Bold.ttf", 700);
+@include font-face("Montserrat", "Montserrat-SemiBold.ttf", 600);
+@include font-face("Montserrat", "Montserrat-Medium.ttf", 500);
+@include font-face("Montserrat", "Montserrat-Regular.ttf", 400);
+
+//Bahnschrift font family
+@include font-face("Bahnschrift", "Bahnschrift-Regular.ttf", 400);

@@ -1,0 +1,43 @@
+{
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "printWidth": 80,
+  "tabWidth": 2,
+  "trailingComma": "all",
+  "singleQuote": false,
+  "jsxBracketSameLine": true,
+  "semi": true,
+  "overrides": [
+    {
+      "files": ["*.tsx", "*.jsx"],
+      "options": {
+        "importOrder": [
+          "^(react/(.*)$)|^(react$)",
+          "<THIRD_PARTY_MODULES>",
+          "^src/services",
+          "^src/hooks",
+          "^src/helpers",
+          ".*(action)",
+          ".*(selector)",
+          "^src/page-components",
+          "^src/components",
+          "^src/utils",
+          "^src/constants",
+          "^src/trns",
+          "^src/types",
+          "^src/assets/images",
+          "^src/assets/icons",
+          "^src/assets/videos",
+          "^src/assets",
+          "^src/.*$",
+          "^\\./",
+          "^\\./.*(constants)",
+          "^\\./.*(trns)",
+          "^\\./.*(types)",
+          "^\\.\\./(.*)$"
+        ],
+        "importOrderSeparation": false,
+        "importOrderSortSpecifiers": false
+      }
+    }
+  ]
+}

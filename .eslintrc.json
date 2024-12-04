@@ -1,0 +1,15 @@
+{
+  "extends": ["next/core-web-vitals", "plugin:prettier/recommended"],
+  "rules": {
+    "react/display-name": "off",
+    "react/prop-types": "off",
+    "no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_", // Ігнорувати змінні, що починаються з "_"
+        "ignoreExports": true // Ігнорувати всі експортувані змінні й типи
+      }
+    ],
+    "no-undef": "error"
+  }
+}
