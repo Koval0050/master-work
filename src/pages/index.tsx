@@ -1,93 +1,109 @@
 import React, { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
 
+interface CovidData {
+  date: number; // Відформатована дата (YYYYMMDD)
+  state: string; // Код штату
+  positive: number; // Кількість позитивних випадків
+  negative: number; // Кількість негативних тестів
+  totalTestResults: number; // Загальна кількість результатів тестів
+  hospitalizedCurrently: number; // Кількість госпіталізованих на даний момент
+  recovered: number; // Кількість одужавших
+  death: number; // Кількість смертей
+}
+
 const Home = () => {
   const chartRef = useRef(null);
+  const [covidData, setCovidData] = useState<CovidData[]>([]);
+  const [selectedState, setSelectedState] = useState<string>("");
+
+  // Simulated fetch function to get Covid data
+  useEffect(() => {
+    // Replace this with an actual API call to fetch data
+    const fetchData = async () => {
+      // Mocked data for illustration
+      const data: CovidData[] = [
+        {
+          date: 20240101,
+          state: "CA",
+          positive: 5030,
+          negative: 4000,
+          totalTestResults: 9000,
+          hospitalizedCurrently: 200,
+          recovered: 4500,
+          death: 100,
+        },
+        {
+          date: 20240102,
+          state: "TX",
+          positive: 3060,
+          negative: 2500,
+          totalTestResults: 5500,
+          hospitalizedCurrently: 150,
+          recovered: 2700,
+          death: 50,
+        },
+        {
+          date: 20240103,
+          state: "TX",
+          positive: 3600,
+          negative: 2500,
+          totalTestResults: 7500,
+          hospitalizedCurrently: 150,
+          recovered: 2900,
+          death: 50,
+        },
+        {
+          date: 20240104,
+          state: "NW",
+          positive: 300,
+          negative: 250,
+          totalTestResults: 500,
+          hospitalizedCurrently: 150,
+          recovered: 200,
+          death: 0,
+        },
+        {
+          date: 20240105,
+          state: "FX",
+          positive: 300,
+          negative: 250,
+          totalTestResults: 6500,
+          hospitalizedCurrently: 190,
+          recovered: 2790,
+          death: 500,
+        },
+        // Add more states data here
+      ];
+      setCovidData(data);
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
-    const posList = [
-      "left",
-      "right",
-      "top",
-      "bottom",
-      "inside",
-      "insideTop",
-      "insideLeft",
-      "insideRight",
-      "insideBottom",
-      "insideTopLeft",
-      "insideTopRight",
-      "insideBottomLeft",
-      "insideBottomRight",
-    ];
+    if (covidData.length === 0) return;
 
-    // Налаштування параметрів
-    const configParameters = {
-      rotate: { min: -90, max: 90 },
-      align: { options: { left: "left", center: "center", right: "right" } },
-      verticalAlign: {
-        options: { top: "top", middle: "middle", bottom: "bottom" },
-      },
-      position: {
-        options: posList.reduce((map: { [key: string]: string }, pos) => {
-          map[pos] = pos;
-          return map;
-        }, {}),
-      },
-      distance: { min: 0, max: 100 },
-    };
-
-    console.log(configParameters);
-
-    const config = {
-      rotate: 90,
-      align: "left",
-      verticalAlign: "middle",
-      position: "insideBottom",
-      distance: 15,
-      onChange: function () {
-        const labelOption = {
-          rotate: config.rotate,
-          align: config.align,
-          verticalAlign: config.verticalAlign,
-          position: config.position,
-          distance: config.distance,
-        };
-
-        chart.setOption({
-          series: [
-            { label: labelOption },
-            { label: labelOption },
-            { label: labelOption },
-            { label: labelOption },
-          ],
-        });
-      },
-    };
-
-    const labelOption = {
-      show: true,
-      position: config.position,
-      distance: config.distance,
-      align: config.align,
-      verticalAlign: config.verticalAlign,
-      rotate: config.rotate,
-      formatter: "{c}  {name|{a}}",
-      fontSize: 16,
-      rich: { name: {} },
-    };
-
-    // Ініціалізація графіку
     const chart = echarts.init(chartRef.current);
 
-    // Опції для графіку
-    const options = {
+    const states = [...new Set(covidData.map((data) => data.state))]; // Get unique states
+    const selectedStateData = covidData.filter(
+      (data) => data.state === selectedState || selectedState === "",
+    );
+
+    const chartOptions = {
       tooltip: {
         trigger: "axis",
         axisPointer: { type: "shadow" },
       },
       legend: {
-        data: ["Forest", "Steppe", "Desert", "Wetland"],
+        data: [
+          "Positive Cases",
+          "Negative Cases",
+          "Hospitalized",
+          "Deaths",
+          "Recovered",
+        ],
       },
       toolbox: {
         show: true,
@@ -105,40 +121,35 @@ const Home = () => {
       xAxis: [
         {
           type: "category",
-          axisTick: { show: false },
-          data: ["2012", "2013", "2014", "2015", "2016"],
+          data: selectedStateData.map((data) => `Date: ${data.date}`),
         },
       ],
       yAxis: [{ type: "value" }],
       series: [
         {
-          name: "Forest",
+          name: "Positive Cases",
           type: "bar",
-          barGap: 0,
-          label: labelOption,
-          emphasis: { focus: "series" },
-          data: [320, 332, 301, 334, 390],
+          data: selectedStateData.map((data) => data.positive),
         },
         {
-          name: "Steppe",
+          name: "Negative Cases",
           type: "bar",
-          label: labelOption,
-          emphasis: { focus: "series" },
-          data: [220, 182, 191, 234, 290],
+          data: selectedStateData.map((data) => data.negative),
         },
         {
-          name: "Desert",
+          name: "Hospitalized",
           type: "bar",
-          label: labelOption,
-          emphasis: { focus: "series" },
-          data: [150, 232, 201, 154, 190],
+          data: selectedStateData.map((data) => data.hospitalizedCurrently),
         },
         {
-          name: "Wetland",
+          name: "Deaths",
           type: "bar",
-          label: labelOption,
-          emphasis: { focus: "series" },
-          data: [98, 77, 101, 99, 40],
+          data: selectedStateData.map((data) => data.death),
+        },
+        {
+          name: "Recovered",
+          type: "bar",
+          data: selectedStateData.map((data) => data.recovered),
         },
       ],
       grid: {
@@ -148,16 +159,28 @@ const Home = () => {
       },
     };
 
-    // Рендер графіку
-    chart.setOption(options);
+    chart.setOption(chartOptions);
 
-    // Очищення при розмонтуванні компонента
     return () => chart.dispose();
-  }, []);
+  }, [covidData, selectedState]);
 
   return (
     <div style={{ padding: "20px" }}>
-      <h1>Interactive Bar Chart</h1>
+      <h1>COVID-19 Data Visualization</h1>
+      <div>
+        <select
+          onChange={(e) => setSelectedState(e.target.value)}
+          value={selectedState}
+          style={{ padding: "10px", marginBottom: "20px" }}>
+          <option value="">Select State</option>
+          {[...new Set(covidData.map((data) => data.state))].map((state) => (
+            <option key={state} value={state}>
+              {state}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div
         ref={chartRef}
         style={{
